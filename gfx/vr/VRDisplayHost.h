@@ -90,6 +90,10 @@ protected:
   virtual bool SubmitFrame(const mozilla::layers::EGLImageDescriptor* aDescriptor,
                            const gfx::Rect& aLeftEyeRect,
                            const gfx::Rect& aRightEyeRect) = 0;
+#elif defined(XP_LINUX)
+  virtual bool SubmitFrame(const mozilla::layers::SurfaceDescriptorX11* aDescriptor,
+                           const gfx::Rect& aLeftEyeRect,
+                           const gfx::Rect& aRightEyeRect) = 0;
 #endif
 
   VRDisplayInfo mDisplayInfo;

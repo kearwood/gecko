@@ -422,6 +422,44 @@ VRDisplayOpenVR::SubmitFrame(MacIOSurface* aMacIOSurface,
   return result;
 }
 
+#elif defined(XP_LINUX)
+
+bool
+VRDisplayOpenVR::SubmitFrame(const mozilla::layers::SurfaceDescriptorX11* aDescriptor,
+                             const gfx::Rect& aLeftEyeRect,
+                             const gfx::Rect& aRightEyeRect)
+{
+  bool result = false;
+
+  RefPtr<gfxXlibSurface> surface = aDescriptor.OpenForeign();
+  // FINDME!! KIP!! HACK!! IMPLEMENT THIS!
+  // KIP - Maybe follow this pattern:
+  //   mozilla::layers::X11TextureSourceOGL::X11TextureSourceOGL
+  // Also follow mozilla::layers::CompositorOGL::CreateContext()...
+
+  GLuint tex = 0;
+
+  gl()->fGenTextures(1, &tex);
+
+  gl()->fBindTexture(LOCAL_GL_TEXTURE_2D, tex);
+  gl::sGLXLibrary.BindTexImage(surface->XDisplay(), surface->GetGLXPixmap());
+
+  if (tex) {
+
+    result = SubmitFrame((void *)tex,
+                         ::vr::ETextureType::TextureType_OpenGL,
+                         aSize, aLeftEyeRect, aRightEyeRect);
+
+    if (gl() && gl()->MakeCurrent()) {
+      gl::sGLXLibrary.ReleaseTexImage(mSurface->XDisplay(), mSurface->GetGLXPixmap());
+      gl()->fDeleteTextures(1, &tex);
+      tex = 0;
+    }
+  }
+
+  return result;
+}
+
 #endif
 
 VRControllerOpenVR::VRControllerOpenVR(dom::GamepadHand aHand, uint32_t aDisplayID,

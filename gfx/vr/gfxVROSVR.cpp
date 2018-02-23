@@ -370,6 +370,17 @@ VRDisplayOSVR::SubmitFrame(const mozilla::layers::EGLImageDescriptor*,
   return false;
 }
 
+#elif defined(XP_LINUX)
+
+bool
+VRDisplayOSVR::SubmitFrame(const mozilla::layers::SurfaceDescriptorX11* aDescriptor,
+                           const gfx::Rect& aLeftEyeRect,
+                           const gfx::Rect& aRightEyeRect)
+{
+  // XXX Add code to submit frame
+  return false;
+}
+
 #endif
 
 void

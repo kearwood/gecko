@@ -566,6 +566,15 @@ VRDisplayPuppet::SubmitFrame(const mozilla::layers::EGLImageDescriptor* aDescrip
   return false;
 }
 
+#elif defined(XP_LINUX)
+
+bool
+VRDisplayPuppet::SubmitFrame(const mozilla::layers::SurfaceDescriptorX11* aDescriptor,
+                             const gfx::Rect& aLeftEyeRect,
+                             const gfx::Rect& aRightEyeRect) {
+  return false;
+}
+
 #endif
 
 void

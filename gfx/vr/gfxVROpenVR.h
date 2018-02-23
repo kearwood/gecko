@@ -48,6 +48,10 @@ protected:
                            const IntSize& aSize,
                            const gfx::Rect& aLeftEyeRect,
                            const gfx::Rect& aRightEyeRect) override;
+#elif defined(XP_LINUX)
+  virtual bool SubmitFrame(const mozilla::layers::SurfaceDescriptorX11* aDescriptor,
+                           const gfx::Rect& aLeftEyeRect,
+                           const gfx::Rect& aRightEyeRect) override;
 #endif
 
 public:

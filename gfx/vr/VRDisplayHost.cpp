@@ -344,6 +344,14 @@ VRDisplayHost::SubmitFrameInternal(const layers::SurfaceDescriptor &aTexture,
       }
       break;
     }
+#elif defined(XP_LINUX)
+    case SurfaceDescriptor::TSurfaceDescriptorX11: {
+       const SurfaceDescriptorX11& desc = aTexture.get_SurfaceDescriptorX11();
+       if (!SubmitFrame(&desc, aLeftEyeRect, aRightEyeRect)) {
+         return;
+       }
+       break;
+    }
 #endif
     default: {
       NS_WARNING("Unsupported SurfaceDescriptor type for VR layer texture");
@@ -351,7 +359,7 @@ VRDisplayHost::SubmitFrameInternal(const layers::SurfaceDescriptor &aTexture,
     }
   }
 
-#if defined(XP_WIN) || defined(XP_MACOSX) || defined(MOZ_ANDROID_GOOGLE_VR)
+#if defined(XP_WIN) || defined(XP_MACOSX) || defined(MOZ_ANDROID_GOOGLE_VR) || defined(XP_LINUX)
 
   /**
    * Trigger the next VSync immediately after we are successfully
