@@ -77,18 +77,6 @@ VRDisplayOpenVR::VRDisplayOpenVR(::vr::IVRSystem *aVRSystem,
 
   mVRCompositor->SetTrackingSpace(::vr::TrackingUniverseSeated);
 
-  uint32_t w, h;
-  mVRSystem->GetRecommendedRenderTargetSize(&w, &h);
-  mDisplayInfo.mEyeResolution.width = w;
-  mDisplayInfo.mEyeResolution.height = h;
-
-  // SteamVR gives the application a single FOV to use; it's not configurable as with Oculus
-  for (uint32_t eye = 0; eye < 2; ++eye) {
-    // get l/r/t/b clip plane coordinates
-    float l, r, t, b;
-    mVRSystem->GetProjectionRaw(static_cast<::vr::Hmd_Eye>(eye), &l, &r, &t, &b);
-    mDisplayInfo.mEyeFOV[eye].SetFromTanRadians(-t, r, b, -l);
-  }
   UpdateEyeParameters();
   UpdateStageParameters();
 }
@@ -109,9 +97,21 @@ VRDisplayOpenVR::Destroy()
 void
 VRDisplayOpenVR::UpdateEyeParameters(gfx::Matrix4x4* aHeadToEyeTransforms /* = nullptr */)
 {
+
+  uint32_t w, h;
+  mVRSystem->GetRecommendedRenderTargetSize(&w, &h);
+  mDisplayInfo.mEyeResolution.width = w;
+  mDisplayInfo.mEyeResolution.height = h;
+
   // Note this must be called every frame, as the IPD adjustment can be changed
   // by the user during a VR session.
   for (uint32_t eye = 0; eye < VRDisplayInfo::NumEyes; eye++) {
+    // SteamVR gives the application a single FOV to use; it's not configurable as with Oculus
+    // get l/r/t/b clip plane coordinates
+    float l, r, t, b;
+    mVRSystem->GetProjectionRaw(static_cast<::vr::Hmd_Eye>(eye), &l, &r, &t, &b);
+    mDisplayInfo.mEyeFOV[eye].SetFromTanRadians(-t, r, b, -l);
+
     ::vr::HmdMatrix34_t eyeToHead = mVRSystem->GetEyeToHeadTransform(static_cast<::vr::Hmd_Eye>(eye));
 
     mDisplayInfo.mEyeTranslation[eye].x = eyeToHead.m[0][3];
