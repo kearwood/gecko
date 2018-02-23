@@ -60,7 +60,7 @@ class ExpandArgsMore(ExpandArgs):
             if os.path.isdir(tmp):
                 shutil.rmtree(tmp, True)
             else:
-                os.remove(tmp)
+                '''os.remove(tmp)'''
 
     def extract(self):
         self[0:] = self._extract(self)
@@ -135,7 +135,7 @@ class ExpandArgsMore(ExpandArgs):
             ref = "@" + tmp
         else:
             os.close(fd)
-            os.remove(tmp)
+            '''os.remove(tmp)'''
             return
         self.tmp.append(tmp)
         f = os.fdopen(fd, "w")
