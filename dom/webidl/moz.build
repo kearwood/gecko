@@ -1081,6 +1081,7 @@ GENERATED_EVENTS_WEBIDL_FILES = [
     'TrackEvent.webidl',
     'UDPMessageEvent.webidl',
     'UserProximityEvent.webidl',
+    'VRDisplayEvent.webidl',
     'WebGLContextEvent.webidl',
 ]
 

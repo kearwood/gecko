@@ -19,5 +19,5 @@ dictionary VRDisplayEventInit : EventInit {
  Constructor(DOMString type, VRDisplayEventInit eventInitDict)]
 interface VRDisplayEvent : Event {
   readonly attribute VRDisplay display;
-  readonly attribute VRDisplayEventReason? reason;
+  readonly attribute VRDisplayEventReason reason;
 };
