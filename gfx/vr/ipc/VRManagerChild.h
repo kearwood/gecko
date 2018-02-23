@@ -80,6 +80,8 @@ public:
 
   virtual void HandleFatalError(const char* aName, const char* aMsg) const override;
 
+  bool IsFrameRequestCallbackRunning();
+
 protected:
   explicit VRManagerChild();
   ~VRManagerChild();
@@ -129,6 +131,7 @@ private:
   * The current frame request callback handle
   */
   int32_t mFrameRequestCallbackCounter;
+  bool mFrameRequestCallbackRunning;
   mozilla::TimeStamp mStartTimeStamp;
 
   nsTArray<RefPtr<dom::VREventObserver>> mListeners;

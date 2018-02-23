@@ -39,6 +39,7 @@ VRManagerChild::VRManagerChild()
   : mDisplaysInitialized(false)
   , mMessageLoop(MessageLoop::current())
   , mFrameRequestCallbackCounter(0)
+  , mFrameRequestCallbackRunning(false)
   , mBackend(layers::LayersBackend::LAYERS_NONE)
   , mPromiseID(0)
   , mVRMockDisplay(nullptr)
@@ -423,10 +424,12 @@ VRManagerChild::RunFrameRequestCallbacks()
 {
   AUTO_PROFILER_TRACING("VR", "RunFrameRequestCallbacks");
 
+  MOZ_ASSERT(!mFrameRequestCallbackRunning);
+  mFrameRequestCallbackRunning = true;
+
   TimeStamp nowTime = TimeStamp::Now();
   mozilla::TimeDuration duration = nowTime - mStartTimeStamp;
   DOMHighResTimeStamp timeStamp = duration.ToMilliseconds();
-
 
   nsTArray<FrameRequest> callbacks;
   callbacks.AppendElements(mFrameRequestCallbacks);
@@ -434,6 +437,12 @@ VRManagerChild::RunFrameRequestCallbacks()
   for (auto& callback : callbacks) {
     callback.mCallback->Call(timeStamp);
   }
+  mFrameRequestCallbackRunning = false;
+}
+bool
+VRManagerchild::IsFrameRequestCallbackRunning()
+{
+  return mFrameRequestCallbackRunning;
 }
 
 void

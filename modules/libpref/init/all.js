@@ -5297,6 +5297,9 @@ pref("dom.vr.enabled", true);
 #else
 pref("dom.vr.enabled", false);
 #endif
+// Unless true, VRDisplay.GetFrameData will fail if called outside of
+// a VRDisplay.requestAnimationFrame callback.
+pref("dom.vr.allow_getframedata_outside_raf", false);
 // It is often desirable to automatically start vr presentation when
 // a user puts on the VR headset.  This is done by emitting the
 // Window.vrdisplayactivate event when the headset's sensors detect it
