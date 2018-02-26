@@ -16,6 +16,7 @@ dictionary VRDisplayEventInit : EventInit {
 };
 
 [Pref="dom.vr.enabled",
+ SecureContext,
  Constructor(DOMString type, VRDisplayEventInit eventInitDict)]
 interface VRDisplayEvent : Event {
   readonly attribute VRDisplay display;
